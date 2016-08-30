@@ -1,10 +1,11 @@
 #config
 
 from sqlalchemy import *
-from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('mysql://user:pwd@localhost:3306/yourdb')
+engine = create_engine('mysql://root:azerty@localhost:3306/madb')
 connection = engine.connect()
+
+from sqlalchemy.orm import sessionmaker
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -22,31 +23,43 @@ from sqlalchemy import (
     Float
 )
 
-import datetime
 
-#Map the table "lien" so you can interact with it directly in Python
+
+#Map la table lien pour pouvoir utiliser du python directement.
 
 Base = declarative_base()
 
-class lien(Base):  #
+class lien(Base):  #<-------------------------
     __tablename__  = "lien"
     id             = Column(Integer,primary_key=True, autoincrement=True) # plays nice with all major database engines
     URL           = Column(VARCHAR(400))                                    # string column need lengths
-    date = Column(DateTime, default=datetime.datetime.utcnow)
+    date = Column(DateTime)
 
     def __init__(self, URL, date):
         self.URL = URL
         self.date = date
 
-#Create the table in the database
+    def get_id(self):
+        return self.id
+    def get_URL(self):
+        return self.URL
+    def get_date(self):
+        return self.date
+
+    def __str__(self):
+        self.id = id
+        self.date = date
+        return id
+
+#Creer la table dans la DB
 
 Base.metadata.create_all(engine)
 
 #insert new row
 
-'''newrow = lien(URL="test.com")
+'''newToner = lien(URL="test.com")
 
-session.add(newrow)
+session.add(newToner)
 session.commit()'''
 
   #read
@@ -55,4 +68,3 @@ session.commit()'''
 for row in result:
     print row['id'], row['URL']
 result.close()'''
-
